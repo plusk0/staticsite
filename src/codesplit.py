@@ -18,14 +18,14 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
             new_nodes.append(node)
     return new_nodes
 
-def extract_markdown_images(text):
-    matches = re.findall(r"!\[.*?\)",text)
+def extract_markdown_images(text):                          
+    matches = re.findall(r"!\[.*?\)",text)                # Reference: https://regexr.com/
     tuples = []
 
     for match in matches:
         text = []
-        text = str(re.findall(r"\[.*?\]",match))
-        text = re.sub(r"\[|\]|\(|\)|\'", "",text)
+        text = str(re.findall(r"\[.*?\]",match))          # Possible improvement: use a simpler implementation
+        text = re.sub(r"\[|\]|\(|\)|\'", "",text)         # for getting rid of ()[]'
 
         link = str(re.findall(r"\(.*?\)",match))
         link = re.sub(r"\[|\]|\(|\)|\'", "",link)
