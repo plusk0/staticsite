@@ -6,7 +6,7 @@ from htmlnode import *
 class TestHTMLNode(unittest.TestCase):
 
     def test_node(self):
-        node = HTMLNode(None, None, "some","some")
+        node = HTMLNode("tag", "value", "children","props")
         print(node)
 
     def test_props(self):

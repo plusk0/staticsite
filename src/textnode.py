@@ -21,7 +21,7 @@ class TextNode():
     def text_node_to_html_node(self):
         match self.text_type:
             case TextType.TEXT:
-                return LeafNode(None,self.text)
+                return LeafNode(None, self.text)
     
             case TextType.BOLD: 
                 return LeafNode("b", self.text)
