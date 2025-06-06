@@ -13,10 +13,10 @@ class HTMLNode():
     
     def props_to_html(self):
         string = ""
-        print("props:",self.props)
+
         for prop in self.props:
             string += f' {prop}="{self.props[prop]}"'
-        return string #string of props as html
+        return string 
     
     def __repr__(self):
         return f"HTMLNode({self.tag},{self.value},{self.children, self.props})"

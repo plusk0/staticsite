@@ -9,11 +9,6 @@ class TestConverter(unittest.TestCase):
         node2 = TextNode("This is a text node", TextType.BOLD)
         self.assertEqual(node, node2)
 
-    def test_conv(self):
-        node = TextNode("This is a bold text node", TextType.BOLD)
-        node2 = TextNode("This is a *text* node", TextType.TEXT)
-        nodes = [node, node2]
-
     def test_extract_markdown_links(self):
         matches = extract_markdown_links(
             "This is text with a [link](https://i.imgur.com/zjjcJKZ.png)"
