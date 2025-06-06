@@ -1,6 +1,7 @@
 from textnode import TextNode
 from fixed_variables import *
 import re
+from htmlnode import *
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
@@ -137,3 +138,11 @@ def block_to_block_type(Text):
         return BlockType.LIST_O
     else:
         return BlockType.PARA
+    
+def markdown_to_html_node(markdown):
+    block_list = markdown_to_blocks(markdown)
+    for block in block_list:
+        type = block_to_block_type(block)
+        match type:
+            case BlockType.LIST_U:
+                return
