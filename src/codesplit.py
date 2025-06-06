@@ -50,9 +50,9 @@ def extract_markdown_links(text):
         link = re.sub(r"\[|\]|\(|\)|\'", "",link)
 
         webpage = (text, link)
-        print(webpage)
+
         tuples.append(webpage)
-        print(tuples)
+
 
     return tuples
 
@@ -109,5 +109,19 @@ def text_to_nodes(text):
 
     links = split_nodes_link(images)
 
+    for node in links:
+        if node.text == "":
+            links.remove(node)
+
     return links
 
+def markdown_to_blocks(markdown):
+    blocklist = []
+    if "\n\n" in markdown:
+        paragraph, rest = markdown.split("\n\n", 1)
+        if paragraph != "":
+            blocklist.append(paragraph.strip())
+        blocklist.extend(markdown_to_blocks(rest))
+    elif markdown != "":
+        blocklist.append(markdown)
+    return blocklist
