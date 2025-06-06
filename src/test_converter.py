@@ -80,8 +80,6 @@ This is the same paragraph on a new line
 - This is a list
 - with items"""
         blocks = markdown_to_blocks(md)
-        print("**blocks**:", blocks)
-
         self.assertEqual(
             blocks,
             [
@@ -91,6 +89,14 @@ This is the same paragraph on a new line
             ],
         )
         
+    def test_block_to_block_type(self):
+        md_block= """
+1 Explore results with the Tools below. 
+2 Replace & List output custom results. 
+3 Details lists capture groups. 
+4 Explain describes your expression in plain English.
+"""
+        self.assertEqual(block_to_block_type(md_block),BlockType.LIST_O)
 
 if __name__ == "__main__":
     unittest.main()

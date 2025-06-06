@@ -1,5 +1,5 @@
 from textnode import TextNode
-from fixed_variables import TextType
+from fixed_variables import *
 import re
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
@@ -125,3 +125,23 @@ def markdown_to_blocks(markdown):
     elif markdown != "":
         blocklist.append(markdown)
     return blocklist
+
+def block_to_block_type(Text):
+    #match Text:
+    if re.findall(r"(?<=(#{1,6} ))(.+)",Text) == Text:
+        return BlockType.HDG
+    if re.findall(r"(?<=(```))(.*)(?=(```))", Text):
+        return BlockType.CODE
+    if re.match(r"\n>.*", Text):
+        return BlockType.QUOTE
+    if re.match(r"\n- ", Text):
+        return BlockType.LIST_U
+    if "\n1":
+        x = 1
+        for line in re.findall(r"?<=\n", Text):
+            if line != x:
+                return BlockType.PARA
+            x += 1
+        return BlockType.LIST_O
+    else:
+        return BlockType.PARA
