@@ -5,19 +5,19 @@ from htmlnode import *
 
 class TestHTMLNode(unittest.TestCase):
 
-    def test_node(self):
-        node = HTMLNode("tag", "value", "children","props")
-        print(node)
+    #def test_node(self):
+    #    node = HTMLNode("tag", "value", "children","props")
 
-    def test_props(self):
-        node = HTMLNode(None, None, "some",{
-        "href": "https://www.google.com",
-        "target": "_blank",
-        })
-        print(node.props_to_html())
 
-    def test_to_html(self):
-        node = HTMLNode(None, "None", "some","some")
+    #def test_props(self):
+    #    node = HTMLNode(None, None, "some",{
+    #    "href": "https://www.google.com",
+    #    "target": "_blank",
+    #    })
+    #    print(node.props_to_html())
+
+    #def test_to_html(self):
+    #    node = HTMLNode(None, "None", "some","some")
         
 
     def test_leaf_to_html_p(self):
@@ -27,7 +27,7 @@ class TestHTMLNode(unittest.TestCase):
     def test_leaf_to_html_p(self):
         node = LeafNode("a", "Click me!", {"href": "https://www.google.com"})
         self.assertEqual(node.to_html(), '<a href="https://www.google.com">Click me!</a>')
-        print(node.to_html())
+
     
     def test_to_html_with_children(self):
         child_node = LeafNode("span", "child")

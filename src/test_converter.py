@@ -13,7 +13,6 @@ class TestConverter(unittest.TestCase):
         node = TextNode("This is a bold text node", TextType.BOLD)
         node2 = TextNode("This is a *text* node", TextType.TEXT)
         nodes = [node, node2]
-        #print(split_nodes_delimiter(nodes, "*", TextType.BOLD))
 
     def test_extract_markdown_links(self):
         matches = extract_markdown_links(
@@ -90,13 +89,35 @@ This is the same paragraph on a new line
         )
         
     def test_block_to_block_type(self):
-        md_block= """
-1 Explore results with the Tools below. 
+        lst_block= """1 Explore results with the Tools below. 
 2 Replace & List output custom results. 
 3 Details lists capture groups. 
-4 Explain describes your expression in plain English.
-"""
-        self.assertEqual(block_to_block_type(md_block),BlockType.LIST_O)
+4 Explain describes your expression in plain English."""
+        self.assertEqual(block_to_block_type(lst_block),BlockType.LIST_O)
+
+        code_block= """```1 Explore results with the Tools below. 
+2 Replace & List output custom results. 
+3 Details lists capture groups. 
+4 Explain describes your expression in plain English.```"""
+        self.assertEqual(block_to_block_type(code_block),BlockType.CODE)
+
+        quote_block= """>1 Explore results with the Tools below. 
+> Replace & List output custom results. 
+> Details lists capture groups. 
+> Explain describes your expression in plain English.```"""
+        self.assertEqual(block_to_block_type(quote_block),BlockType.QUOTE)
+
+        unordered= """- 1 Explore results with the Tools below. 
+- Replace & List output custom results. 
+- Details lists capture groups. 
+- Explain describes your expression in plain English.```"""
+        self.assertEqual(block_to_block_type(unordered),BlockType.LIST_U)
+
+        hdg= """####1 Explore results with the Tools below. 
+> Replace & List output custom results. 
+> Details lists capture groups. 
+> Explain describes your expression in plain English.```"""
+        self.assertNotEqual(block_to_block_type(hdg),BlockType.HDG)
 
 if __name__ == "__main__":
     unittest.main()

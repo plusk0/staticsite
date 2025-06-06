@@ -27,8 +27,7 @@ def extract_markdown_images(text):
     for match in matches:
         text = []
         text = str(re.findall(r"\[.*?\]",match))        # Possible improvement: use a simpler implementation
-        text = re.sub(r"\[|\]|\(|\)|\'", "",text)       # for getting rid of ()[]'
-                                                        # > using a list and removing first and last entry
+        text = re.sub(r"\[|\]|\(|\)|\'", "",text)       # for getting rid of ()[]'                                            # > using a list and removing first and last entry
         link = str(re.findall(r"\(.*?\)",match))
         link = re.sub(r"\[|\]|\(|\)|\'", "",link)
         image = (text, link)
@@ -38,27 +37,20 @@ def extract_markdown_images(text):
 
 def extract_markdown_links(text):
     matches = re.findall(r"(?<!!)\[.*?\)",text)
-
     tuples = []
 
     for match in matches:
-
         text = str(re.findall(r"\[.*?\]",match))
         text = re.sub(r"\[|\]|\(|\)|\'", "",text)
-
         link = str(re.findall(r"\(.*?\)",match))
         link = re.sub(r"\[|\]|\(|\)|\'", "",link)
-
         webpage = (text, link)
-
         tuples.append(webpage)
-
-
     return tuples
 
 def split_nodes_image(old_nodes):
     new_nodes = []
-    #print("old:",len(old_nodes), old_nodes)
+
     for node in old_nodes:
             if "!" in node.text:
                 node_text = []
@@ -100,19 +92,14 @@ def split_nodes_link(old_nodes):
 
 def text_to_nodes(text):
     delimit_bold = split_nodes_delimiter([TextNode(text,TextType.TEXT)], "**", TextType.BOLD)
-
     delimit_italic = split_nodes_delimiter(delimit_bold, "_", TextType.ITALIC)
-
     delimit_code = split_nodes_delimiter(delimit_italic, "`", TextType.CODE)
-
     images = split_nodes_image(delimit_code)
-
     links = split_nodes_link(images)
 
     for node in links:
         if node.text == "":
             links.remove(node)
-
     return links
 
 def markdown_to_blocks(markdown):
@@ -127,19 +114,24 @@ def markdown_to_blocks(markdown):
     return blocklist
 
 def block_to_block_type(Text):
-    #match Text:
-    if re.findall(r"(?<=(#{1,6} ))(.+)",Text) == Text:
+    if re.match(r"(^#{1,6} )(.+)",Text):
         return BlockType.HDG
-    if re.findall(r"(?<=(```))(.*)(?=(```))", Text):
+    
+    if re.match(r"(^```.*```$)", Text, re.DOTALL):
         return BlockType.CODE
-    if re.match(r"\n>.*", Text):
-        return BlockType.QUOTE
-    if re.match(r"\n- ", Text):
-        return BlockType.LIST_U
-    if "\n1":
-        x = 1
-        for line in re.findall(r"?<=\n", Text):
-            if line != x:
+    
+    if re.match(r"^>.*", Text):
+        if re.match(r"\n>", Text) == re.match(r"\n.", Text):
+            return BlockType.QUOTE
+
+    if re.match(r"^- ", Text):
+        if re.match(r"\n- ", Text) == re.match(r"\n.", Text):
+            return BlockType.LIST_U
+    
+    if re.match(r"^1", Text):
+        x = 2
+        for line_nr in re.findall(r"\n\d", Text, re.MULTILINE):
+            if str(x) not in line_nr:
                 return BlockType.PARA
             x += 1
         return BlockType.LIST_O
