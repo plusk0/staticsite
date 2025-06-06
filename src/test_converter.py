@@ -113,11 +113,11 @@ This is the same paragraph on a new line
 - Explain describes your expression in plain English.```"""
         self.assertEqual(block_to_block_type(unordered),BlockType.LIST_U)
 
-        hdg= """####1 Explore results with the Tools below. 
+        hdg= """#### 1 Explore results with the Tools below. 
 > Replace & List output custom results. 
-> Details lists capture groups. 
+- Details lists capture groups. 
 > Explain describes your expression in plain English.```"""
-        self.assertNotEqual(block_to_block_type(hdg),BlockType.HDG)
+        self.assertEqual(block_to_block_type(hdg),BlockType.HDG)
 
 if __name__ == "__main__":
     unittest.main()
