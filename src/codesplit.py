@@ -118,9 +118,9 @@ def block_to_block_type(Text):
 
     if re.match(r"(^#{1,6} )(.+)",Text):
         return BlockType.HDG
-    print("test1")
+
     if re.findall(r"(^```.*```$)", Text, re.DOTALL) != []:
-        print("regex:", re.findall(r"(^```.*```$)", Text, re.DOTALL))
+
         return BlockType.CODE
     
     if re.match(r"^>.*", Text):
@@ -154,15 +154,16 @@ def create_html_nodes(markdown):
     x = 1
     for block in block_list:
         types = block_to_block_type(block)
-        print(f"Block: {block} recieved type {types}")
+        #print(f"Block: {block} recieved type {types}")
         match types:
             case BlockType.PARA:
                 HTML_nodes.append(HTMLNode("p", block))
             case BlockType.HDG:
-                HTML_nodes.append(HTMLNode(f"h{x}",block))
-                x += 1
+                x = block.count("#")
+                print("number of #:", x, block)
+                HTML_nodes.append(HTMLNode(f"h{x}",block.strip("# ")))
             case BlockType.CODE:
-                HTML_nodes.append(HTMLNode("code",block))
+                HTML_nodes.append(HTMLNode("code",block.strip("`")))
             case BlockType.QUOTE:
                 HTML_nodes.append(HTMLNode("blockquote",block))
             case BlockType.LIST_U:
@@ -179,7 +180,8 @@ def HTML_node_to_parent_child(HTML_nodes):
     for node in HTML_nodes:
         children = text_to_children(node.value)
         if node.tag == "code":
-            new_nodes.append(LeafNode("code",node.value))
+            child = TextNode(node.value,TextType.CODE).text_node_to_html_node()
+            new_nodes.append(ParentNode("pre", [child,]))
         elif len(children) > 1:
             new_nodes.append(ParentNode(node.tag, children))
         else:
@@ -189,29 +191,21 @@ def HTML_node_to_parent_child(HTML_nodes):
 
 def markdown_to_html_node(markdown):
     html_nodes = create_html_nodes(markdown)
-
-    print(f"""
-**************htmlnodes***********
-{html_nodes}
-*******************************
-
-""")
-    
     nested_nodes = HTML_node_to_parent_child(html_nodes)
 
-    print(f"""
-    *****************nested*******
-    {nested_nodes}
-    *******************************
-    """)
-
     parent = ParentNode("div",nested_nodes)
-    print(f"""
-************parent*********
-{parent}
-*******************************
+#   print(f"""
+#************parent*********
+#{parent}
+#*******************************
 
+##""")
+    print(f"""
+************parentHTML*********
+{parent.to_html()}
+*******************************
 """)
+  
     return parent
 
 

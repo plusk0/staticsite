@@ -50,9 +50,17 @@ class ParentNode(HTMLNode):
         if self.tag == None:
             raise ValueError
         if self.children == None:
+            if self.tag == "pre":
+                print("error:", self.children)
             raise ValueError("Missing children for ParentNode object")
         for child in self.children:
-                output += child.to_html()
+
+                try:
+                    output += child.to_html()
+                except AttributeError as e:
+                    print(e,":",self.children)
+        if self.tag == "code":
+            output = "<pre>" + output + "</pre>"
         if self.props != None:
             return f'<{self.tag}{self.props_to_html()}>{output}</{self.tag}>'
         else:
