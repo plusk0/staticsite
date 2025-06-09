@@ -42,6 +42,7 @@ class TestConverter(unittest.TestCase):
                 new_nodes,
             )
 
+###################################################
 
     def test_split(self):
         node = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
@@ -64,6 +65,8 @@ class TestConverter(unittest.TestCase):
             new_nodes,
         )
 
+###################################################
+
     def test_markdown_to_blocks(self):
         md = """
 This is **bolded** paragraph
@@ -82,7 +85,9 @@ This is the same paragraph on a new line
                 "- This is a list\n- with items",
             ],
         )
-        
+
+ ###################################################
+
     def test_block_to_block_type(self):
         lst_block= """1 Explore results with the Tools below. 
 2 Replace & List output custom results. 
@@ -113,6 +118,46 @@ This is the same paragraph on a new line
 - Details lists capture groups. 
 > Explain describes your expression in plain English.```"""
         self.assertEqual(block_to_block_type(hdg),BlockType.HDG)
+
+###################################################
+
+    def test_paragraphs(self):
+        md = """
+    This is **bolded** paragraph
+    text in a p
+    tag here
+
+    This is another paragraph with _italic_ text and `code` here
+
+    """
+
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><p>This is <b>bolded</b> paragraph text in a p tag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
+        )
+
+###################################################
+
+    def test_codeblock(self):
+        md = """
+    ```
+    This is text that _should_ remain
+    the **same** even with inline stuff
+    ```
+    """
+
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff\n</code></pre></div>",
+        )
+
+
+
+
 
 if __name__ == "__main__":
     unittest.main()

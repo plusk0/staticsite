@@ -115,6 +115,7 @@ def markdown_to_blocks(markdown):
     return blocklist
 
 def block_to_block_type(Text):
+
     if re.match(r"(^#{1,6} )(.+)",Text):
         return BlockType.HDG
     
@@ -131,7 +132,8 @@ def block_to_block_type(Text):
     
     if re.match(r"^1", Text):
         x = 2
-        for line_nr in re.findall(r"\n\d", Text, re.MULTILINE):
+        list_line_nrs = re.findall(r"\n\d", Text, re.MULTILINE)
+        for line_nr in list_line_nrs:
             if str(x) not in line_nr:
                 return BlockType.PARA
             x += 1
@@ -139,10 +141,58 @@ def block_to_block_type(Text):
     else:
         return BlockType.PARA
     
-def markdown_to_html_node(markdown):
+def text_to_children(text):
+    Leaf_nodes = []
+    text_nodes = text_to_nodes(text)
+    Leaf_nodes = [x.text_node_to_html_node() for x in text_nodes]
+    return Leaf_nodes
+
+def create_html_nodes(markdown):
     block_list = markdown_to_blocks(markdown)
+    HTML_nodes = []
+    x = 1
     for block in block_list:
-        type = block_to_block_type(block)
-        match type:
+        types = block_to_block_type(block)
+        match types:
+
+            case BlockType.PARA:
+                children = text_to_children(block)
+                if len(children) > 1:
+                    HTML_nodes.append(ParentNode("p", children))
+                else: HTML_nodes.append(children)
+            case BlockType.HDG:
+                #HTML_nodes.append(HTMLNode(f"h{x}",block))
+                #x += 1
+                children = text_to_children(block)
+                if len(children) > 1:
+                    HTML_nodes.append(ParentNode("h", children))
+                else: HTML_nodes.append(children)
+                x +=1
+
+            case BlockType.CODE:
+                HTML_nodes.append(HTMLNode("code",block))
+            case BlockType.QUOTE:
+                HTML_nodes.append(HTMLNode("blockquote",block))
             case BlockType.LIST_U:
-                return
+                HTML_nodes.append(HTMLNode("ol",block))
+            case BlockType.LIST_O:
+                HTML_nodes.append(HTMLNode("ul",block))
+            case _:
+                raise ValueError("unknown block type")
+    return HTML_nodes
+
+    
+def markdown_to_html_node(markdown):
+    html_nodes = create_html_nodes(markdown)
+    for node in html_nodes:
+        print(node.value)
+        if block_to_block_type(node.value) == BlockType.CODE:
+            node.children = TextNode(node.value).text_node_to_html_node()
+        else:
+            node.children = text_to_children(node.value)
+    parent = ParentNode("div",html_nodes)
+    return parent
+
+
+    
+            
