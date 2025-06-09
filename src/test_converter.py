@@ -142,7 +142,7 @@ This is the same paragraph on a new line
 
     def test_codeblock(self):
         md = """
-    ```
+        ```
     This is text that _should_ remain
     the **same** even with inline stuff
     ```
