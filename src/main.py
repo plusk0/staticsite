@@ -1,9 +1,10 @@
 from textnode import TextNode
-from fixed_variables import TextType, source, dest, markdown_path
+from fixed_variables import TextType, source, dest, markdown_path, basepath
 import os
 import shutil
 import re
 from codesplit import markdown_to_html_node
+import sys
 
 
 def copy_dir(src, dest):           #"manual" recursive copying for practice
@@ -41,9 +42,12 @@ def generate_page(from_path, template_path, dest_path, filename = "index"):
     html_string = markdown_to_html_node(text).to_html()
 
     output = template.format(Title, html_string)
-    
+    output.replace('href="/', 'href="{basepath}')
+    output.replace('src="/', 'src="{basepath}')
+
     new_file = open(dest_path+"/"+filename+".html", "w")
     new_file.write(output)
+
     return 
 
 def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
@@ -65,8 +69,9 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
 
 def main():
     
+
     copy_dir(source, dest)
-    page = generate_pages_recursive(markdown_path, markdown_path+"/template.html", dest)
+    generate_pages_recursive(markdown_path, markdown_path+"/template.html", dest)
 
     
 
