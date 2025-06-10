@@ -24,38 +24,51 @@ def copy_dir(src, dest):           #"manual" recursive copying for practice
             copy_dir(path, new_dest)
     return
 
-def extract_title():
-    file = open(markdown_path + "/index.md")
+def extract_title(from_path):
+    file = open(from_path)
     markdown = file.read()
     title = re.search(r"(^|\n)# .*", markdown).group().strip("# ")
     return title
 
-class Default(dict):
-
-    def __missing__(self, key):
-        return key
-
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path, filename = "index"):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
-    file = open(from_path + "/index.md")
+    file = open(from_path)
     text = file.read()
     file.close()
-    template = open(template_path + "/template.html").read()
+    template = open(template_path).read()
 
-    Title = extract_title()
+    Title = extract_title(from_path)
     html_string = markdown_to_html_node(text).to_html()
 
     output = template.format(Title, html_string)
     
-    return output
+    new_file = open(dest_path+"/"+filename+".html", "w")
+    new_file.write(output)
+    return 
 
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    local_contents = os.listdir(dir_path_content)
+
+    for file in local_contents:
+        file_path = dir_path_content + f"/{file}"
+        
+        if os.path.isfile(file_path):
+            name, file_type = file.split(".")
+            if file_type == "md":
+                generate_page(file_path,template_path, dest_dir_path, name)
+        if os.path.isdir(file_path):
+            new_dest = dest_dir_path + f"/{file}"
+            os.mkdir(new_dest)
+            generate_pages_recursive(file_path, template_path ,new_dest)
+
+    return
 
 def main():
     
     copy_dir(source, dest)
-    page = generate_page(markdown_path, markdown_path, dest)
-    dest_file = open(dest + "/index.html",'w')
-    dest_file.write(page)
+    page = generate_pages_recursive(markdown_path, markdown_path+"/template.html", dest)
+
+    
 
 
 main()

@@ -2,9 +2,9 @@ from enum import Enum
 
 root = "/home/desktop/workspace/staticsite"
 
-source = root + "/src/static"
-dest = root + "/public"
-markdown_path = root + "/src/content"
+source = root + "/src/static"       # static content
+dest = root + "/public"             # public folder
+markdown_path = root + "/content"   # template + main index md-file
 
 
 class TextType(Enum):

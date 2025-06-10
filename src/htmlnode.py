@@ -16,7 +16,6 @@ class HTMLNode():
         if self.tag == "code":
             pass
         for prop in self.props:
-            print(self.props)
             string += f' {prop}="{self.props[prop]}"'
 
         return string 
@@ -30,6 +29,9 @@ class LeafNode(HTMLNode):
         super().__init__(tag, value)
         self.props = props
 
+    def __repr__(self):
+        return f"LeafNode({self.tag},{self.value},{self.props})"
+    
     def to_html(self):
 
         if self.value == None:
@@ -50,6 +52,7 @@ class ParentNode(HTMLNode):
 
     def to_html(self):
         output = ""
+
         if self.tag == None:
             raise ValueError
         if self.children == None:
@@ -58,8 +61,6 @@ class ParentNode(HTMLNode):
             raise ValueError("Missing children for ParentNode object")
         for child in self.children:
             output += child.to_html()
-        if self.tag == "code":
-            output = "<pre>" + output + "</pre>"
         if self.props != None:
             return f'<{self.tag}{self.props_to_html()}>{output}</{self.tag}>'
         else:

@@ -1,6 +1,7 @@
 import unittest
 from codesplit import *
 from fixed_variables import TextType
+from main import *
 
 class TestConverter(unittest.TestCase):
 
@@ -135,7 +136,7 @@ This is another paragraph with _italic_ text and `code` here
         html = node.to_html()
         self.assertEqual(
             html,
-            "<div><p>This is <b>bolded</b> paragraph\ntext in a p\ntag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
+            "<div><p>This is <b>bolded</b> paragraph text in a p tag here</p><p>This is another paragraph with <i>italic</i> text and <code>code</code> here</p></div>",
         )
 
 ###################################################
@@ -156,12 +157,13 @@ the **same** even with inline stuff
     def test_header(self):
         md = """### Header3 here"""
         node = markdown_to_html_node(md)
+        print(node)
         html = node.to_html()
         self.assertEqual(
             html,
             "<div><h3>Header3 here</h3></div>",
         )
-        
+
 
 
 

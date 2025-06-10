@@ -16,7 +16,7 @@ class TextNode():
         )
 
     def __repr__(self):
-        return f"TextNode({self.text},{self.text_type},{self.url})"
+        return f"TextNode({self.text}, {self.text_type.value}, {self.url})"
     
     def text_node_to_html_node(self):
         match self.text_type:
@@ -30,8 +30,7 @@ class TextNode():
             case TextType.CODE: 
                 return LeafNode("code",self.text)
             case TextType.LINK: 
-                #print(self.url)
-                return LeafNode("a",self.text,{"url" : self.url})
+                return LeafNode("a",self.text,{"href" : self.url})
             case TextType.IMAGE: 
                 return LeafNode("img","",{"src" : self.url, "alt" : self.text})
 
