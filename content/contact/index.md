@@ -2,8 +2,12 @@
 
 [< Back Home](/)
 
-Give me a call anytime to chat about Tolkien!
+Custom markdown to html converter (static site generator).
 
-`555-555-5555`
+Created by plusko via the boot.dev online-course
+
+Shoot me a message any time!
+
+`dandy.boasting578@passinbox.com`
 
 **"Váya márië."**
