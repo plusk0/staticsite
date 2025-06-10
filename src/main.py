@@ -42,9 +42,11 @@ def generate_page(from_path, template_path, dest_path, filename = "index"):
     html_string = markdown_to_html_node(text).to_html()
 
     output = template.format(Title, html_string)
-    output.replace('href="/', 'href="{basepath}')
-    output.replace('src="/', 'src="{basepath}')
 
+    output.replace('href="/', 'href="{basepath}')   # needed for github redirecting
+    output.replace('src="/', 'src="{basepath}')     # since root is at /[basepath]
+    print(output.replace('src="/', 'src="{basepath}'))
+    #print(output)
     new_file = open(dest_path+"/"+filename+".html", "w")
     new_file.write(output)
 

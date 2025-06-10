@@ -1,5 +1,6 @@
 from enum import Enum
 import sys
+import pathlib
 
 basepath = sys.argv
 
@@ -7,7 +8,7 @@ if len(basepath) > 1:
     print("path:",basepath[1])
     root = str(basepath[1])
 else:
-    root = "/home/desktop/workspace/staticsite/"
+    root = str(pathlib.Path().absolute()) + "/"
 
 source = root + "src/static"       # static content
 #dest = root + "public"            # public folder for local testing
