@@ -1,5 +1,12 @@
 from enum import Enum
 
+root = "/home/desktop/workspace/staticsite"
+
+source = root + "/src/static"
+dest = root + "/public"
+markdown_path = root + "/src/content"
+
+
 class TextType(Enum):
     TEXT = "text"
     BOLD = "bold"

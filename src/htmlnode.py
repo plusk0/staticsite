@@ -13,9 +13,13 @@ class HTMLNode():
     
     def props_to_html(self):
         string = ""
-
+        if self.tag == "code":
+            pass
         for prop in self.props:
-            string += f' {prop}="{self.props[prop]}"'
+            try:
+                string += f' {prop}="{prop}"'
+            except TypeError and IndexError:
+                raise NameError("type error here:", prop)
         return string 
     
     def __repr__(self):
@@ -54,11 +58,7 @@ class ParentNode(HTMLNode):
                 print("error:", self.children)
             raise ValueError("Missing children for ParentNode object")
         for child in self.children:
-
-                try:
-                    output += child.to_html()
-                except AttributeError as e:
-                    print(e,":",self.children)
+            output += child.to_html()
         if self.tag == "code":
             output = "<pre>" + output + "</pre>"
         if self.props != None:

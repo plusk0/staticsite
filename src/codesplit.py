@@ -53,13 +53,13 @@ def split_nodes_image(old_nodes):
     new_nodes = []
 
     for node in old_nodes:
-            if "!" in node.text:
+            if "![" in node.text:
                 node_text = []
                 node_text = node.text.split("!",1)
                 new_nodes.append(TextNode(node_text[0],TextType.TEXT))
                 node_text = node_text[1].split(")",1)
                 tuples = extract_markdown_images("!" + node_text[0] + ")")
-                new_nodes.append(TextNode(tuples[0][0],TextType.IMAGE,tuples[0][1]))
+                new_nodes.append(TextNode(tuples[0][0],TextType.IMAGE,tuples[0][1]))    #error ?
 
                 if "!" in node_text[1]:
                     more_nodes = split_nodes_image([TextNode(node_text[1],TextType.TEXT)])
@@ -81,6 +81,7 @@ def split_nodes_link(old_nodes):
                 new_nodes.append(TextNode(node_text[0],TextType.TEXT))
                 node_text = node_text[1].split(")",1)
                 tuples = extract_markdown_links("[" + node_text[0] + ")")
+                #print("tuples:!!!",type(tuples[0][1]))
                 new_nodes.append(TextNode(tuples[0][0],TextType.LINK,tuples[0][1]))
 
                 if "(" in node_text[1]:
@@ -160,7 +161,6 @@ def create_html_nodes(markdown):
                 HTML_nodes.append(HTMLNode("p", block))
             case BlockType.HDG:
                 x = block.count("#")
-                print("number of #:", x, block)
                 HTML_nodes.append(HTMLNode(f"h{x}",block.strip("# ")))
             case BlockType.CODE:
                 HTML_nodes.append(HTMLNode("code",block.strip("`")))
@@ -194,17 +194,6 @@ def markdown_to_html_node(markdown):
     nested_nodes = HTML_node_to_parent_child(html_nodes)
 
     parent = ParentNode("div",nested_nodes)
-#   print(f"""
-#************parent*********
-#{parent}
-#*******************************
-
-##""")
-    print(f"""
-************parentHTML*********
-{parent.to_html()}
-*******************************
-""")
   
     return parent
 

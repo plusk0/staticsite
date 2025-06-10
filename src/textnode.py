@@ -30,7 +30,8 @@ class TextNode():
             case TextType.CODE: 
                 return LeafNode("code",self.text)
             case TextType.LINK: 
-                return LeafNode("a",self.text, self.url)
+                #print(self.url)
+                return LeafNode("a",self.text,{"url" : self.url})
             case TextType.IMAGE: 
                 return LeafNode("img","",{"src" : self.url, "alt" : self.text})
 
