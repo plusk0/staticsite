@@ -7,12 +7,12 @@ if len(basepath) > 1:
     print("path:",basepath[1])
     root = str(basepath[1])
 else:
-    root = "/home/desktop/workspace/staticsite"
+    root = "/home/desktop/workspace/staticsite/"
 
-source = root + "/src/static"       # static content
-#dest = root + "/public"            # public folder for local testing
-dest = root + "/docs"               # docs folder for github
-markdown_path = root + "/content"   # template + main index md-file
+source = root + "src/static"       # static content
+#dest = root + "public"            # public folder for local testing
+dest = root + "docs"               # docs folder for github
+markdown_path = root + "content"   # template + main index md-file
 
 
 class TextType(Enum):
