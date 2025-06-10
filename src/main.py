@@ -1,5 +1,5 @@
 from textnode import TextNode
-from fixed_variables import TextType, source, dest, markdown_path, basepath
+from fixed_variables import TextType, source, dest, markdown_path, basepath, static
 import os
 import shutil
 import re
@@ -43,8 +43,8 @@ def generate_page(from_path, template_path, dest_path, filename = "index"):
 
     output = template.format(Title, html_string)
 
-    output.replace('href="/', f'href="{basepath}')   # needed for github redirecting
-    output.replace('src="/', f'src="{basepath}')     # since root is at /[basepath]
+    output = output.replace('href="/', f'href="{basepath}')   # needed for github redirecting
+    output = output.replace('src="/', f'src="{basepath}')     # since root is at /[basepath]
     print(output.replace('src="/', f'src="{basepath}'))
 
     new_file = open(dest_path+"/"+filename+".html", "w")
@@ -64,16 +64,20 @@ def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
                 generate_page(file_path,template_path, dest_dir_path, name)
         if os.path.isdir(file_path):
             new_dest = dest_dir_path + f"/{file}"
-            os.mkdir(new_dest)
+            if os.path.isdir(new_dest):
+                pass
+            else:
+                os.mkdir(new_dest)
             generate_pages_recursive(file_path, template_path ,new_dest)
 
     return
 
 def main():
-    
-
-    copy_dir(source, dest)
-    generate_pages_recursive(markdown_path, markdown_path+"/template.html", dest)
+    if os.path.exists(dest):
+        shutil.rmtree(dest)
+    os.mkdir(dest)
+    copy_dir(static, dest)
+    generate_pages_recursive(source, markdown_path+"/template.html", dest)
 
     
 
