@@ -16,10 +16,9 @@ class HTMLNode():
         if self.tag == "code":
             pass
         for prop in self.props:
-            try:
-                string += f' {prop}="{prop}"'
-            except TypeError and IndexError:
-                raise NameError("type error here:", prop)
+            print(self.props)
+            string += f' {prop}="{self.props[prop]}"'
+
         return string 
     
     def __repr__(self):

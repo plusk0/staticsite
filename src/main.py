@@ -39,12 +39,13 @@ def generate_page(from_path, template_path, dest_path):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
     file = open(from_path + "/index.md")
     text = file.read()
+    file.close()
     template = open(template_path + "/template.html").read()
 
     Title = extract_title()
     html_string = markdown_to_html_node(text).to_html()
 
-    output = template.format(Title, html_string) #, Content = html_string)
+    output = template.format(Title, html_string)
     
     return output
 
@@ -52,8 +53,9 @@ def generate_page(from_path, template_path, dest_path):
 def main():
     
     copy_dir(source, dest)
-    generate_page(markdown_path, markdown_path, dest)
-
+    page = generate_page(markdown_path, markdown_path, dest)
+    dest_file = open(dest + "/index.html",'w')
+    dest_file.write(page)
 
 
 main()

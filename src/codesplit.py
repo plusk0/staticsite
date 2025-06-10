@@ -175,6 +175,14 @@ def create_html_nodes(markdown):
 
     return HTML_nodes
 
+def split_list_node(node):
+    split = node.value.split("\n")
+    print("split:", split)
+    children = []
+    for line in split:
+        children.append(LeafNode("li",line))
+    return children
+
 def HTML_node_to_parent_child(HTML_nodes):
     new_nodes = []
     for node in HTML_nodes:
@@ -182,6 +190,9 @@ def HTML_node_to_parent_child(HTML_nodes):
         if node.tag == "code":
             child = TextNode(node.value,TextType.CODE).text_node_to_html_node()
             new_nodes.append(ParentNode("pre", [child,]))
+        elif node.tag == "ol" or node.tag == "ul":
+            children = split_list_node(node)
+            new_nodes.append(ParentNode(node.tag, children))
         elif len(children) > 1:
             new_nodes.append(ParentNode(node.tag, children))
         else:
