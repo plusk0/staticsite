@@ -43,10 +43,10 @@ def generate_page(from_path, template_path, dest_path, filename = "index"):
 
     output = template.format(Title, html_string)
 
-    output.replace('href="/', 'href="{basepath}')   # needed for github redirecting
-    output.replace('src="/', 'src="{basepath}')     # since root is at /[basepath]
-    print(output.replace('src="/', 'src="{basepath}'))
-    #print(output)
+    output.replace('href="/', f'href="{basepath}')   # needed for github redirecting
+    output.replace('src="/', f'src="{basepath}')     # since root is at /[basepath]
+    print(output.replace('src="/', f'src="{basepath}'))
+
     new_file = open(dest_path+"/"+filename+".html", "w")
     new_file.write(output)
 
